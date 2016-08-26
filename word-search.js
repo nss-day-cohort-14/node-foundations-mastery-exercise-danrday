@@ -8,6 +8,8 @@ var es = require('event-stream')
 
 var readStream = fs.createReadStream('/usr/share/dict/words')
 
+const { limitTen } = require('./limit-ten')
+
 
 function Multiwords(s){
     var a = flix[0].toLowerCase();
@@ -28,15 +30,20 @@ readStream.pipe(es.split()).pipe(es.map(function (data, cb) {
 
   let newData = "no match found\n"
 
+      // for (letter in data) {
+      //   console.log("data.length", typeof(data) + " " + data + " " + data[letter])
+      //
+      //   }
+
       currentComparedWord = data.toLowerCase();
 
       var n = currentComparedWord.indexOf(wordToSearchFor);
 
       if ( n === 0 ) {
-        console.log(data)
+        newData = data + '\n'
       }
 
       cb(null, newData)
 
     }))
-    .pipe(process.stdout)
+    .pipe(limitTen).pipe(process.stdout)
