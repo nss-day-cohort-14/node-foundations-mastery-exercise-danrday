@@ -24,13 +24,18 @@ process.stdin.once('readable', function (pipedArgument) {
 
         if ( n === 0 ) {
           newData = data + '\n'
+          cb(null, newData)
+        }
+        else {
+          cb()
         }
 
-        cb(null, newData)
+
+
 
       }))
       .pipe(limitTen)
-      // .pipe(hackerTyper)
+      .pipe(hackerTyper)
       .pipe(process.stdout)
 
 });

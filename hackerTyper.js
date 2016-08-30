@@ -3,34 +3,18 @@ const { Transform } = require('stream')
 
 const hackerTyper = Transform()
 
+letterInterval = 50
 
 hackerTyper._transform = (buffer, _, cb) => {
 
+  const letters = [...buffer.toString()]
 
-  let word = buffer.toString().split('')
+  letters.forEach((letter, i) => {
+    setTimeout( () => hackerTyper.push(letters[i]), letterInterval*i)
+  })
 
-
-  function* generator(word){
-
-  for (i=0; i<word.length; i++) {
-    yield word[i]
-  }
-}
-
-  var gen = generator(word);
-
-  for (i=0; i<word.length; i++) {
-    console.log("val", gen.next().value)
-  }
-
-
-  // console.log("val", gen.next().value)
-
-
-  cb(null, word[0])
+  setTimeout( () => cb(), buffer.length*letterInterval);
 
 }
-
-
 
 module.exports = { hackerTyper }
